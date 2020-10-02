@@ -19,10 +19,9 @@ jobs:
       - name: Docker Push
         uses: warchant/Publish-Docker-Github-Action@3
         with:
-          name: vbtc-explorer
+          name: veriblock/vbtc-explorer
           dockerfile: Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          registry: docker-internal.veriblock.com
           snapshot: true
           tag_names: true
