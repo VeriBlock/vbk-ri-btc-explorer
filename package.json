@@ -20,8 +20,10 @@
     "url": "git+https://github.com/janoside/btc-rpc-explorer.git"
   },
   "dependencies": {
+    "@veriblock/vblake": "^1.0.4",
     "async": "^3.2.0",
     "basic-auth": "^2.0.1",
+    "bech32-buffer": "^0.1.2",
     "bitcoin-core": "^2.3.0",
     "bitcoinjs-lib": "^5.1.8",
     "bluebird": "^3.7.2",

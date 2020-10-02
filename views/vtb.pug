@@ -1,0 +1,16 @@
+extends layout
+
+block headContent
+    if (vtb)
+        title VTB ##{vtb.vtb.id}
+    else
+        title VTB: Error
+
+block content
+    if (vtb)
+        h1.h3 VTB
+            br
+            small.text-monospace.word-wrap(style="width: 100%;")= vtb.vtb.id
+        hr
+
+        include ./includes/vtb-content.pug

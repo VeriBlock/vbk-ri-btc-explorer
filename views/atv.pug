@@ -1,0 +1,16 @@
+extends layout
+
+block headContent
+    if (atv)
+        title ATV ##{atv.atv.id}
+    else
+        title ATV: Error
+
+block content
+    if (atv)
+        h1.h3 ATV
+            br
+            small.text-monospace.word-wrap(style="width: 100%;")= atv.atv.id
+        hr
+
+        include ./includes/atv-content.pug

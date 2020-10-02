@@ -1,0 +1,63 @@
+- var endorsedBy = {}
+- pop.state.endorsedBy.forEach(function(id){
+-   result.atvs && result.atvs.forEach(function(resp){
+-       if(resp.atv.id === id) {
+-           endorsedBy[id] = resp
+-       }
+-   })
+- })
+
+- var containing = {}
+- pop.state.containingEndorsements.forEach(function(id){
+-   result.atvs && result.atvs.forEach(function(resp){
+-       if(resp.atv.id === id) {
+-           containing[id] = resp
+-       }
+-   })
+- })
+
+div.card.shadow-sm( )
+    div.card-header.text-monospace
+        div= `Endorsed By ${pop.state.endorsedBy.length} ATV${pop.state.endorsedBy.length !== 1 ? "s": ""}`
+    div.card-body.px-2.px-md-3.table-responsive
+        table.table.table-striped.mb-0
+            thead
+                tr
+                    th.data-header.text-left ATV id
+                    th.data-header.text-left Containing Block Hash
+                    th.data-header.text-left Payout Address
+                    th.data-header.text-left VBK Endorser
+
+            each e in endorsedBy
+                tr
+                    td.data-cell.text-monospace.text-left
+                        a(href=`/atv/${e.atv.id}`)= e.atv.id
+                    td.data-cell.text-monospace.text-left
+                        a(href=`/block/${e.blockhash}`)= e.blockhash
+                    td.data-cell.text-monospace.text-left
+                        a(href=`/address/${e.payoutAddress}`)= e.payoutAddress
+                    td.data-cell.text-monospace.text-left
+                        a(href=`https://testnet.explore.veriblock.org/address/${e.atv.transaction.sourceAddress}` target='_blank')= e.atv.transaction.sourceAddress
+
+
+    div.card-header.text-monospace
+        div Contains Endorsements
+    div.card-body.px-2.px-md-3.table-responsive
+        table.table.table-striped.mb-0
+            thead
+                tr
+                    th.data-header.text-left ATV id
+                    th.data-header.text-left Endorsed Block Hash
+                    th.data-header.text-left Payout Address
+                    th.data-header.text-left VBK Endorser
+            each e in containing
+                tr
+                    td.data-cell.text-monospace.text-left
+                        a(href=`/atv/${e.atv.id}`)= e.atv.id
+                    td.data-cell.text-monospace.text-left
+                        a(href=`/block/${e.endorsedHash}`)= e.endorsedHash
+                    td.data-cell.text-monospace.text-left
+                        a(href=`/address/${e.payoutAddress}`)= e.payoutAddress
+                    td.data-cell.text-monospace.text-left
+                        a(href=`https://testnet.explore.veriblock.org/address/${e.atv.transaction.sourceAddress}` target='_blank')= e.atv.transaction.sourceAddress
+

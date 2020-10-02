@@ -12,6 +12,7 @@ var config = require("./config.js");
 var coins = require("./coins.js");
 var coinConfig = coins[config.coin];
 var redisCache = require("./redisCache.js");
+var vbk = require('./vbk')
 
 
 var exponentScales = [
@@ -743,7 +744,8 @@ function outputTypeName(outputType) {
 		"witness_v0_keyhash": "Witness, v0 Key Hash",
 		"witness_v0_scripthash": "Witness, v0 Script Hash",
 		"nonstandard": "Non-Standard",
-		"nulldata": "Null Data"
+		"nulldata": "Null Data",
+		"pop": "PoP Payout"
 	};
 
 	if (map[outputType]) {
@@ -755,6 +757,7 @@ function outputTypeName(outputType) {
 }
 
 module.exports = {
+	vbk: vbk,
 	reflectPromise: reflectPromise,
 	redirectToConnectPageIfNeeded: redirectToConnectPageIfNeeded,
 	hex2ascii: hex2ascii,

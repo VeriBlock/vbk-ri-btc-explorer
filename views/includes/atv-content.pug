@@ -1,0 +1,78 @@
+ul.nav.nav-tabs.mb-3
+    li.nav-item
+        a.nav-link.active(data-toggle="tab", href="#tab-details", role="tab") Details
+    li.nav-item
+        a.nav-link(data-toggle="tab", href="#tab-json", role="tab") JSON
+
+div.tab-content
+    div.tab-pane.active(id="tab-details", role="tabpanel")
+        div.row
+            - var sumTableLabelClass = "summary-split-table-label";
+            - var sumTableValueClass = "summary-split-table-content";
+
+            div.mb-3(class=("col-md-12 pr-0"))
+                div.card.shadow-sm(style="height: 100%;")
+                    div.card-body.px-2.px-md-3
+                        h3.h6.mb-0 Summary
+                        hr
+
+                        div.clearfix
+                            div.row
+                                div(class=sumTableLabelClass) ID
+                                div.text-monospace(class=sumTableValueClass)
+                                    a(href=`/atv/${atv.atv.id}/block/${atv.blockhash}`)= atv.atv.id
+
+                            div.row
+                                div(class=sumTableLabelClass) On Active Chain
+                                div.text-monospace(class=sumTableValueClass)= atv.in_active_chain
+
+                            div.row
+                                div(class=sumTableLabelClass) Containing Block Hash
+                                div.text-monospace(class=sumTableValueClass)
+                                    a(href=`/block/${atv.blockhash}`)= atv.blockhash
+
+                            div.row
+                                div(class=sumTableLabelClass) Endorsed Block Hash
+                                div.text-monospace(class=sumTableValueClass)
+                                    a(href=`/block/${endorsedBlockHash}`)= endorsedBlockHash
+
+                            div.row
+                                div(class=sumTableLabelClass) Block Of Proof VBK Block Hash
+                                div.text-monospace(class=sumTableValueClass)
+                                    - var blockOfProof = atv.atv.blockOfProof
+                                    a(href=`https://testnet.explore.veriblock.org/block/${blockOfProof.hash}`)= blockOfProof.hash
+
+                            div.row
+                                div(class=sumTableLabelClass) Confirmations
+                                div.text-monospace(class=sumTableValueClass)= atv.confirmations
+
+                            div.row
+                                div(class=sumTableLabelClass) Payout Script
+                                div.text-monospace(class=sumTableValueClass)= atv.atv.transaction.publicationData.payoutInfo
+
+                            div.row
+                                div(class=sumTableLabelClass) Payout Address
+                                div.text-monospace(class=sumTableValueClass)
+                                    if(payoutInfoJson.addresses.length === 1)
+                                        a(href=`/address/${payoutInfoJson.addresses[0]}`)= payoutInfoJson.addresses[0]
+                                    else
+                                        div= JSON.stringify(payoutInfoJson.addresses, null, 2)
+
+                            div.row
+                                div(class=sumTableLabelClass) Endorser VBK Address
+                                div.text-monospace(class=sumTableValueClass)
+                                    a(href=`https://testnet.explore.veriblock.org/address/${atv.atv.transaction.sourceAddress}`)= atv.atv.transaction.sourceAddress
+
+
+    div.tab-pane(id="tab-json", role="tabpanel")
+        div.tab-content
+            div.tab-pane.active(id="tab-json-block-summary", role="tabpanel")
+                div.card.shadow-sm.mb-3
+                    div.card-body
+                        h4.h6.mb-0 ATV Summary
+                        hr
+
+                        div.highlight
+                            pre
+                                code.json.bg-light #{JSON.stringify(atv.atv, null, 4)}
+

@@ -1,0 +1,63 @@
+ul.nav.nav-tabs.mb-3
+    li.nav-item
+        a.nav-link.active(data-toggle="tab", href="#tab-details", role="tab") Details
+    li.nav-item
+        a.nav-link(data-toggle="tab", href="#tab-json", role="tab") JSON
+
+div.tab-content
+    div.tab-pane.active(id="tab-details", role="tabpanel")
+        div.row
+            - var sumTableLabelClass = "summary-split-table-label";
+            - var sumTableValueClass = "summary-split-table-content";
+
+            div.mb-3(class=("col-md-12 pr-0"))
+                div.card.shadow-sm(style="height: 100%;")
+                    div.card-body.px-2.px-md-3
+                        h3.h6.mb-0 Summary
+                        hr
+
+                        div.clearfix
+                            div.row
+                                div(class=sumTableLabelClass) ID
+                                div.text-monospace(class=sumTableValueClass)
+                                    a(href=`/vtb/${vtb.vtb.id}/block/${vtb.blockhash}`)= vtb.vtb.id
+
+                            div.row
+                                div(class=sumTableLabelClass) On Active Chain
+                                div.text-monospace(class=sumTableValueClass)= vtb.in_active_chain
+
+                            div.row
+                                div(class=sumTableLabelClass) Containing vBTC Block
+                                div.text-monospace(class=sumTableValueClass)
+                                    a(href=`/block/${vtb.blockhash}`)= `#${vtb.blockheight} ${vtb.blockhash}`
+
+                            div.row
+                                div(class=sumTableLabelClass) Confirmations
+                                div.text-monospace(class=sumTableValueClass)= vtb.confirmations
+
+                            div.row
+                                div(class=sumTableLabelClass) Containing VBK Block
+                                div.text-monospace(class=sumTableValueClass)
+                                    a(href=`https://testnet.explore.veriblock.org/block/${vtb.vtb.containingBlock.hash}`)= `#${vtb.vtb.containingBlock.height} ${vtb.vtb.containingBlock.hash}`
+
+                            - const txhash = vtb.vtb.transaction.hash;
+                            if(txhash)
+                                div.row
+                                    div(class=sumTableLabelClass) Containing VBK Transaction
+                                    div.text-monospace(class=sumTableValueClass)
+                                        a(href=`https://testnet.explore.veriblock.org/tx/${txhash}`)= `${txhash}`
+
+
+
+    div.tab-pane(id="tab-json", role="tabpanel")
+        div.tab-content
+            div.tab-pane.active(id="tab-json-block-summary", role="tabpanel")
+                div.card.shadow-sm.mb-3
+                    div.card-body
+                        h4.h6.mb-0 vtb Summary
+                        hr
+
+                        div.highlight
+                            pre
+                                code.json.bg-light #{JSON.stringify(vtb.vtb, null, 4)}
+

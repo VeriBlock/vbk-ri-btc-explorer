@@ -11,9 +11,9 @@ var rpcCred = credentials.rpc;
 
 if (rpcCred.cookie && !rpcCred.username && !rpcCred.password && fs.existsSync(rpcCred.cookie)) {
 	console.log(`Loading RPC cookie file: ${rpcCred.cookie}`);
-	
+
 	[ rpcCred.username, rpcCred.password ] = fs.readFileSync(rpcCred.cookie).toString().split(':', 2);
-	
+
 	if (!rpcCred.password) {
 		throw new Error(`Cookie file ${rpcCred.cookie} in unexpected format`);
 	}
@@ -29,9 +29,12 @@ var electrumXServerUriStrings = (process.env.BTCEXP_ELECTRUMX_SERVERS || "").spl
 var electrumXServers = [];
 for (var i = 0; i < electrumXServerUriStrings.length; i++) {
 	var uri = url.parse(electrumXServerUriStrings[i]);
-	
+
 	electrumXServers.push({protocol:uri.protocol.substring(0, uri.protocol.length - 1), host:uri.hostname, port:parseInt(uri.port)});
 }
+
+var vbkExplorerUrl = process.env.VBK_EXPLORER_URL || "https://testnet.explore.veriblock.org";
+var bfiApiUrl = process.env.BFI_API_URL || "http://localhost:8080";
 
 ["BTCEXP_DEMO", "BTCEXP_PRIVACY_MODE", "BTCEXP_NO_INMEMORY_RPC_CACHE"].forEach(function(item) {
 	if (process.env[item] === undefined) {
@@ -55,7 +58,7 @@ module.exports = {
 	demoSite: (process.env.BTCEXP_DEMO.toLowerCase() == "true"),
 	queryExchangeRates: (process.env.BTCEXP_NO_RATES.toLowerCase() != "true"),
 	noInmemoryRpcCache: (process.env.BTCEXP_NO_INMEMORY_RPC_CACHE.toLowerCase() == "true"),
-	
+
 	rpcConcurrency: (process.env.BTCEXP_RPC_CONCURRENCY || 10),
 
 	rpcBlacklist:
@@ -157,17 +160,17 @@ module.exports = {
 				{
 					title:"Related Sites",
 					links:[
-						{name: "Bitcoin Explorer", url:"https://explorer.btc21.org", imgUrl:"/img/logo/btc.svg"},
-						{name: "Testnet Explorer", url:"https://testnet.btc21.org", imgUrl:"/img/logo/tbtc.svg"},
-						{name: "LND Admin", url:"https://lnd-admin.chaintools.io", imgUrl:"/img/logo/lnd-admin.png"},
+						{name: "btc1 explorer", url:"http://95.217.67.117:3002", imgUrl:"/img/logo/vbtc.svg"},
+						{name: "btc2 explorer", url:"http://95.217.67.118:3002", imgUrl:"/img/logo/vbtc.svg"},
+						{name: "bfi explorer", url:"http://95.217.125.52:3002", imgUrl:"/img/logo/vbtc.svg"},
 						//{name: "Litecoin Explorer", url:"https://ltc.chaintools.io", imgUrl:"/img/logo/ltc.svg"},
 						//{name: "Lightning Explorer", url:"https://lightning.chaintools.io", imgUrl:"/img/logo/lightning.svg"},
 					]
 				}
 			]
 		},
-		subHeaderToolsList:[0, 10, 9, 4, 11, 6, 7], // indexes in "siteTools" below that are shown in the site "sub menu" (visible on all pages except homepage)
-		prioritizedToolIdsList: [0, 10, 11, 9, 3, 4, 12, 2, 5, 1, 6, 7, 8],
+		subHeaderToolsList:[0, 2, 10, 1, 9, 4, 11], // indexes in "siteTools" below that are shown in the site "sub menu" (visible on all pages except homepage)
+		prioritizedToolIdsList: [0, 10, 11, 9, 3, 4, 12, 2, 5, 1, 6, 7],
 	},
 
 	credentials: credentials,
@@ -204,5 +207,8 @@ module.exports = {
 			notifyEmail:"chaintools.io@gmail.com",
 			customAmountUrl: "https://donate.btc21.org/apps/2TBP2GuQnYXGBiHQkmf4jNuMh6eN/pos"
 		}
-	}
+	},
+
+	vbkExplorerUrl: vbkExplorerUrl,
+	bfiApiUrl: bfiApiUrl,
 };

@@ -21,13 +21,14 @@ var config = require("./../app/config.js");
 var coreApi = require("./../app/api/coreApi.js");
 var addressApi = require("./../app/api/addressApi.js");
 var rpcApi = require("./../app/api/rpcApi.js");
+const vbk = require('./../app/vbk.js')
 
 const v8 = require('v8');
 
 const forceCsrf = csurf({ ignoreMethods: [] });
 
 router.get("/", function(req, res, next) {
-	if (req.session.host == null || req.session.host.trim() == "") {
+	if (req.session.host == null || req.session.host.trim() === "") {
 		if (req.cookies['rpc-host']) {
 			res.locals.host = req.cookies['rpc-host'];
 		}
@@ -88,7 +89,7 @@ router.get("/", function(req, res, next) {
 			for (var i = 0; i < (config.site.homepage.recentBlocksCount + 1); i++) {
 				blockHeights.push(getblockchaininfo.blocks - i);
 			}
-		} else if (global.activeBlockchain == "regtest") {
+		} else if (global.activeBlockchain === "regtest") {
 			// hack: default regtest node returns getblockchaininfo.blocks=0, despite having a genesis block
 			// hack this to display the genesis block
 			blockHeights.push(0);
@@ -429,6 +430,14 @@ router.get("/blocks", function(req, res, next) {
 
 		var promises = [];
 
+		// VBK: remove genesis block from a query
+		{
+			const index = blockHeights.indexOf(0);
+			if (index > -1) {
+				blockHeights.splice(index, 1);
+			}
+		}
+
 		promises.push(coreApi.getBlocksByHeight(blockHeights));
 
 		promises.push(coreApi.getBlocksStatsByHeight(blockHeights));
@@ -605,6 +614,51 @@ router.post("/search", function(req, res, next) {
 	}
 });
 
+router.get("/atv/:atvid/", function(req, res, next) {
+	const atvid = req.params.atvid;
+	coreApi.getRawAtv(atvid, true)
+		.then(function(atv) {
+			res.locals.containingBlockHash = atv.blockhash;
+			res.locals.atv = atv;
+			res.locals.endorsedBlockHash = vbk.getBtcBlockHash(atv.atv.transaction.publicationData.header);
+
+			const pinfo = atv.atv.transaction.publicationData.payoutInfo;
+
+			coreApi.decodeScript(pinfo).then(function(data){
+				res.locals.payoutInfoJson = data;
+				res.render("atv");
+				next();
+			}).catch(function(err) {
+				res.locals.payoutInfoHex = pinfo;
+				res.render("atv");
+				next();
+			})
+		})
+		.catch(function(err) {
+			res.locals.userMessageMarkdown = `Failed loading ATV ${atvid} from block ${block}`;
+			res.locals.pageErrors.push(utils.logError("vbk1", err));
+			next(err);
+		})
+})
+
+router.get("/vtb/:vtbid/block/:blockhash", function(req, res, next) {
+	const vtbid = req.params.vtbid;
+	const block = req.params.blockhash;
+	coreApi.getRawVtb(vtbid, true, block)
+		.then(function(vtb) {
+			res.locals.containingBlockHash = block;
+			res.locals.vtb = vtb;
+
+			res.render("vtb");
+			next();
+		})
+		.catch(function(err) {
+			res.locals.userMessageMarkdown = `Failed loading VTB ${atvid} from block ${block}`;
+			res.locals.pageErrors.push(utils.logError("vbk1", err));
+			next(err);
+		})
+})
+
 router.get("/block-height/:blockHeight", function(req, res, next) {
 	var blockHeight = parseInt(req.params.blockHeight);
 
@@ -641,6 +695,7 @@ router.get("/block-height/:blockHeight", function(req, res, next) {
 
 		promises.push(new Promise(function(resolve, reject) {
 			coreApi.getBlockByHashWithTransactions(result.hash, limit, offset).then(function(result) {
+				res.locals.result.atvs = result.atvs;
 				res.locals.result.getblock = result.getblock;
 				res.locals.result.transactions = result.transactions;
 				res.locals.result.txInputsByTransaction = result.txInputsByTransaction;

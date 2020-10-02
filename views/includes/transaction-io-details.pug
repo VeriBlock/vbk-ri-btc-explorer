@@ -88,7 +88,7 @@ div.row.text-monospace
 
 													if (global.specialAddresses[vout.scriptPubKey.addresses[0]])
 														- var specialAddressInfo = global.specialAddresses[vout.scriptPubKey.addresses[0]];
-														if (specialAddressInfo.type == "minerPayout")
+														if (specialAddressInfo.type === "minerPayout")
 															span  
 															a(data-toggle="tooltip", title=("Miner payout address: " + specialAddressInfo.minerInfo.name))
 																i.fas.fa-certificate.text-primary
@@ -159,7 +159,7 @@ div.row.text-monospace
 		- var hiddenRowCount = 0;
 		each vout, voutIndex in tx.vout
 			- var highlightRow = false;
-			if (txIOHighlightAddress != null && vout.scriptPubKey && vout.scriptPubKey.addresses && vout.scriptPubKey.addresses[0] == txIOHighlightAddress)
+			if (txIOHighlightAddress != null && vout.scriptPubKey && vout.scriptPubKey.addresses && vout.scriptPubKey.addresses[0] === txIOHighlightAddress)
 				- highlightRow = true;
 
 			if (!highlightRow)
@@ -195,13 +195,18 @@ div.row.text-monospace
 												small.data-tag.bg-dark
 													span(title=`Output Type: ${utils.outputTypeName(vout.scriptPubKey.type)}`, data-toggle="tooltip") #{utils.outputTypeAbbreviation(vout.scriptPubKey.type)}
 
+												if (voutIndex >= 1 && voutIndex < tx.vout.length - 2) /*witness, pop root*/
+													small.data-tag.bg-dark
+														span(title=`Output Type: ${utils.outputTypeName("pop")}`, data-toggle="tooltip") POP
+
+
 										each addr in vout.scriptPubKey.addresses
 											a(id=("output-" + voutIndex), href=("/address/" + addr))
 												span.text-monospace.word-wrap(class=(highlightRow ? "font-weight-bold" : "")) #{addr}
 
 											if (global.specialAddresses[addr])
 												- var specialAddressInfo = global.specialAddresses[addr];
-												if (specialAddressInfo.type == "minerPayout")
+												if (specialAddressInfo.type === "minerPayout")
 													span  
 													a(data-toggle="tooltip", title=("Miner payout address: " + specialAddressInfo.minerInfo.name))
 														i.fas.fa-certificate.text-primary
@@ -225,6 +230,15 @@ div.row.text-monospace
 											small.font-weight-bold data
 											small (hex) - 
 											small.word-wrap #{vout.scriptPubKey.asm}
+
+									else if (vout.scriptPubKey.hex && vout.scriptPubKey.hex.startsWith('6a233ae6ca'))
+										div.mb-tiny
+											small.data-tag.bg-primary OP_RETURN
+
+										div(id=`op-return-hex-${tx.txid}-${vout.n}`)
+											small.font-weight-bold data
+											small (pop root hex)
+											small.word-wrap #{vout.scriptPubKey.hex.substr(5 * 2)}
 
 									else if (vout.scriptPubKey.asm && vout.scriptPubKey.asm.startsWith('OP_RETURN '))
 										div.mb-tiny

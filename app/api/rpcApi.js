@@ -8,6 +8,7 @@ var semver = require("semver");
 var utils = require("../utils.js");
 var config = require("../config.js");
 var coins = require("../coins.js");
+var vbk = require("../vbk.js")
 
 var activeQueueTasks = 0;
 
@@ -29,6 +30,18 @@ var minRpcVersions = {getblockstats:"0.17.0"};
 global.rpcStats = {};
 
 
+function decodeScript(hex) {
+	return getRpcDataWithParams({method: "decodescript", parameters:[hex]});
+}
+function getRawAtv(id, verbose=true, blockhash) {
+	return getRpcDataWithParams({method:"getrawatv", parameters:[id, verbose, blockhash]});
+}
+function getRawVtb(id, verbose=true, blockhash) {
+	return getRpcDataWithParams({method:"getrawvtb", parameters:[id, verbose, blockhash]});
+}
+function getRawVbkBlock(id, verbose=true, blockhash) {
+	return getRpcDataWithParams({method:"getrawvbkblock", parameters:[id, verbose, blockhash]});
+}
 
 function getBlockchainInfo() {
 	return getRpcData("getblockchaininfo");
@@ -411,17 +424,17 @@ function getRpcDataWithParams(request) {
 						throw new Error(`RpcError: type=failure-02`);
 					}
 
-					if (Array.isArray(result) && result.length == 1) {
+					if (Array.isArray(result) && result.length === 1) {
 						var result0 = result[0];
 
-						if (result0 && result0.name && result0.name == "RpcError") {
+						if (result0 && result0.name && result0.name === "RpcError") {
 							logStats(request.method, true, new Date().getTime() - startTime, false);
 
 							throw new Error(`RpcError: type=errorResponse-03`);
 						}
 					}
 
-					if (result.name && result.name == "RpcError") {
+					if (result.name && result.name === "RpcError") {
 						logStats(request.method, true, new Date().getTime() - startTime, false);
 
 						throw new Error(`RpcError: type=errorResponse-04`);
@@ -502,6 +515,11 @@ module.exports = {
 	getBlockStatsByHeight: getBlockStatsByHeight,
 	getBlockHeaderByHash: getBlockHeaderByHash,
 	getBlockHeaderByHeight: getBlockHeaderByHeight,
+
+	decodeScript: decodeScript,
+	getRawAtv: getRawAtv,
+	getRawVtb: getRawVtb,
+	getRawVbkBlock: getRawVbkBlock,
 
 	minRpcVersions: minRpcVersions
 };

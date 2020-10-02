@@ -11,6 +11,7 @@ var coins = require("../coins.js");
 var redisCache = require("../redisCache.js");
 var Decimal = require("decimal.js");
 var md5 = require("md5");
+var vbk = require("../vbk.js")
 
 // choose one of the below: RPC to a node, or mock data while testing
 var rpcApi = require("./rpcApi.js");
@@ -250,6 +251,24 @@ function getChainTxStats(blockCount) {
 function getNetworkHashrate(blockCount) {
 	return tryCacheThenRpcApi(miscCache, "getNetworkHashrate-" + blockCount, 20 * ONE_MIN, function() {
 		return rpcApi.getNetworkHashrate(blockCount);
+	});
+}
+
+function getRawAtv(atvid, verbose, blockhash) {
+	return tryCacheThenRpcApi(miscCache, "getRawAtv-" + atvid, ONE_YR, function() {
+		return rpcApi.getRawAtv(atvid, verbose, blockhash);
+	});
+}
+
+function getRawVtb(id, verbose, blockhash) {
+	return tryCacheThenRpcApi(miscCache, "getRawVtb-" + id, ONE_YR, function() {
+		return rpcApi.getRawVtb(id, verbose, blockhash);
+	});
+}
+
+function decodeScript(hex) {
+	return tryCacheThenRpcApi(miscCache, "decodescript-" + hex, ONE_YR, function() {
+		return rpcApi.decodeScript(hex);
 	});
 }
 
@@ -845,11 +864,32 @@ function getBlockByHashWithTransactions(blockHash, txLimit, txOffset) {
 					txsResult.transactions.shift();
 				}
 
-				resolve({ getblock:block, transactions:txsResult.transactions, txInputsByTransaction:txsResult.txInputsByTransaction });
+				var atvspromises = []
+				block.pop.state.endorsedBy.forEach(function(atvid) {
+					atvspromises.push(getRawAtv(atvid, true))
+				});
+				block.pop.state.containingEndorsements.forEach(function(atvid) {
+					atvspromises.push(getRawAtv(atvid, true))
+				});
+
+				Promise.all(atvspromises).then(function(atvs){
+					atvs = atvs.map(function(atv){
+						var pub = atv.atv.transaction.publicationData
+						return {
+							...atv,
+							endorsedHash: vbk.getBtcBlockHash(pub.header),
+							payoutAddress: vbk.payoutToAddress(pub.payoutInfo)
+						}
+					})
+					resolve({
+						getblock: block,
+						transactions: txsResult.transactions,
+						txInputsByTransaction: txsResult.txInputsByTransaction,
+						atvs: atvs
+					});
+				}).catch(reject)
 			});
-		}).catch(function(err) {
-			reject(err);
-		});
+		}).catch(reject);
 	});
 }
 
@@ -976,6 +1016,9 @@ function logCacheSizes() {
 }
 
 module.exports = {
+	getRawAtv: getRawAtv,
+	getRawVtb: getRawVtb,
+	decodeScript: decodeScript,
 	getGenesisBlockHash: getGenesisBlockHash,
 	getGenesisCoinbaseTransactionId: getGenesisCoinbaseTransactionId,
 	getBlockchainInfo: getBlockchainInfo,

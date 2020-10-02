@@ -346,7 +346,20 @@ div.tab-content
 									small  hashes
 									
 									span.text-muted  (#{result.getblock.chainwork.replace(/^0+/, '')})
-									
+
+		div.card.shadow-sm.mb-3
+			div.card-body.px-2.px-md-3
+				div.clearfix
+					div.float-left.mr-2
+						h3.h6.mb-0 PoP Data
+				div(id="pop-data-wrapper")
+					hr
+
+					- var pop = result.getblock.pop
+
+					include ./block-popdata.pug
+
+
 
 		div.card.shadow-sm.mb-3
 			div.card-body.px-2.px-md-3
