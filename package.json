@@ -37,6 +37,7 @@
     "electrum-client": "github:chaintools/node-electrum-client#43a999036f9c5",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
+    "express-validator": "^6.8.0",
     "jstransformer-markdown-it": "^2.1.0",
     "lru-cache": "^5.1.1",
     "marked": "^0.7.0",
@@ -51,7 +52,8 @@
     "request": "^2.88.2",
     "semver": "^7.3.2",
     "serve-favicon": "^2.5.0",
-    "simple-git": "^1.132.0"
+    "simple-git": "^1.132.0",
+    "xss": "^1.0.8"
   },
   "devDependencies": {
     "less": "3.9.0",

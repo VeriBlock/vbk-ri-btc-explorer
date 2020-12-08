@@ -19,6 +19,7 @@ var coins = require("./../app/coins.js");
 var config = require("./../app/config.js");
 var coreApi = require("./../app/api/coreApi.js");
 var addressApi = require("./../app/api/addressApi.js");
+const {xss} = require("./validators");
 
 const forceCsrf = csurf({ ignoreMethods: [] });
 
@@ -27,7 +28,7 @@ const forceCsrf = csurf({ ignoreMethods: [] });
 
 
 router.get("/formatCurrencyAmount/:amt", function(req, res, next) {
-	res.locals.currencyValue = req.params.amt;
+	res.locals.currencyValue = xss(req.params.amt);
 
 	res.render("includes/value-display");
 

@@ -13,6 +13,7 @@ var coins = require("./coins.js");
 var coinConfig = coins[config.coin];
 var redisCache = require("./redisCache.js");
 var vbk = require('./vbk')
+const {xss} = require("../routes/validators");
 
 
 var exponentScales = [
@@ -641,6 +642,8 @@ const reflectPromise = p => p.then(v => ({v, status: "resolved" }),
 global.errorStats = {};
 
 function logError(errorId, err, optionalUserData = null) {
+	err = xss(err)
+
 	if (!global.errorLog) {
 		global.errorLog = [];
 	}
@@ -660,10 +663,10 @@ function logError(errorId, err, optionalUserData = null) {
 		global.errorLog.splice(0, 1);
 	}
 
-	debugErrorLog("Error " + errorId + ": " + err + ", json: " + JSON.stringify(err) + (optionalUserData != null ? (", userData: " + optionalUserData + " (json: " + JSON.stringify(optionalUserData) + ")") : ""));
+	debugErrorLog("Error " + xss(errorId) + ": " + xss(err) + ", json: " + JSON.stringify(xss(err)) + (optionalUserData != null ? (", userData: " + xss(optionalUserData) + " (json: " + JSON.stringify(xss(optionalUserData)) + ")") : ""));
 	
 	if (err && err.stack) {
-		debugErrorVerboseLog("Stack: " + err.stack);
+		debugErrorVerboseLog("Stack: " + xss(err.stack));
 	}
 
 	var returnVal = {errorId:errorId, error:err};
@@ -705,7 +708,7 @@ function buildQrCodeUrl(str, results) {
 			if (err) {
 				logError("2q3ur8fhudshfs", err, str);
 
-				reject(err);
+				reject(xss(err));
 
 				return;
 			}

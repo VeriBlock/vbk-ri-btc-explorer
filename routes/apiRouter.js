@@ -19,20 +19,15 @@ var coins = require("./../app/coins.js");
 var config = require("./../app/config.js");
 var coreApi = require("./../app/api/coreApi.js");
 var addressApi = require("./../app/api/addressApi.js");
+const {xss, parseCommaSeparatedInts, parseHexString, shouldParseInt, parseCommaSeparatedHexStrings} = require('./validators')
 
 const forceCsrf = csurf({ ignoreMethods: [] });
 
 
 
 
-
 router.get("/blocks-by-height/:blockHeights", function(req, res, next) {
-	var blockHeightStrs = req.params.blockHeights.split(",");
-	
-	var blockHeights = [];
-	for (var i = 0; i < blockHeightStrs.length; i++) {
-		blockHeights.push(parseInt(blockHeightStrs[i]));
-	}
+	const blockHeights = parseCommaSeparatedInts(req.params.blockHeights);
 
 	coreApi.getBlocksByHeight(blockHeights).then(function(result) {
 		res.json(result);
@@ -42,12 +37,7 @@ router.get("/blocks-by-height/:blockHeights", function(req, res, next) {
 });
 
 router.get("/block-headers-by-height/:blockHeights", function(req, res, next) {
-	var blockHeightStrs = req.params.blockHeights.split(",");
-	
-	var blockHeights = [];
-	for (var i = 0; i < blockHeightStrs.length; i++) {
-		blockHeights.push(parseInt(blockHeightStrs[i]));
-	}
+	const blockHeights = parseCommaSeparatedInts(req.params.blockHeights);
 
 	coreApi.getBlockHeadersByHeight(blockHeights).then(function(result) {
 		res.json(result);
@@ -57,12 +47,7 @@ router.get("/block-headers-by-height/:blockHeights", function(req, res, next) {
 });
 
 router.get("/block-stats-by-height/:blockHeights", function(req, res, next) {
-	var blockHeightStrs = req.params.blockHeights.split(",");
-	
-	var blockHeights = [];
-	for (var i = 0; i < blockHeightStrs.length; i++) {
-		blockHeights.push(parseInt(blockHeightStrs[i]));
-	}
+	const blockHeights = parseCommaSeparatedInts(req.params.blockHeights);
 
 	coreApi.getBlocksStatsByHeight(blockHeights).then(function(result) {
 		res.json(result);
@@ -72,8 +57,7 @@ router.get("/block-stats-by-height/:blockHeights", function(req, res, next) {
 });
 
 router.get("/mempool-txs/:txids", function(req, res, next) {
-	var txids = req.params.txids.split(",");
-
+	var txids = parseCommaSeparatedHexStrings(req.params.txids)
 	var promises = [];
 
 	for (var i = 0; i < txids.length; i++) {
@@ -86,14 +70,14 @@ router.get("/mempool-txs/:txids", function(req, res, next) {
 		next();
 
 	}).catch(function(err) {
-		res.json({success:false, error:err});
+		res.json({success:false, error:xss(err)});
 
 		next();
 	});
 });
 
 router.get("/raw-tx-with-inputs/:txid", function(req, res, next) {
-	var txid = req.params.txid;
+	var txid = parseHexString(req.params.txid)
 
 	var promises = [];
 
@@ -105,15 +89,15 @@ router.get("/raw-tx-with-inputs/:txid", function(req, res, next) {
 		next();
 
 	}).catch(function(err) {
-		res.json({success:false, error:err});
+		res.json({success:false, error:xss(err)});
 
 		next();
 	});
 });
 
 router.get("/block-tx-summaries/:blockHeight/:txids", function(req, res, next) {
-	var blockHeight = parseInt(req.params.blockHeight);
-	var txids = req.params.txids.split(",");
+	var blockHeight = shouldParseInt(req.params.blockHeight);
+	var txids = parseCommaSeparatedHexStrings(req.params.txids);
 
 	var promises = [];
 
@@ -129,7 +113,7 @@ router.get("/block-tx-summaries/:blockHeight/:txids", function(req, res, next) {
 		next();
 
 	}).catch(function(err) {
-		res.json({success:false, error:err});
+		res.json({success:false, error:xss(err)});
 
 		next();
 	});
@@ -141,22 +125,22 @@ router.get("/utils/:func/:params", function(req, res, next) {
 
 	var data = null;
 
-	if (func == "formatLargeNumber") {
+	if (func === "formatLargeNumber") {
 		if (params.indexOf(",") > -1) {
-			var parts = params.split(",");
+			const parts = parseCommaSeparatedInts(params)
 
-			data = utils.formatLargeNumber(parseInt(parts[0]), parseInt(parts[1]));
+			data = utils.formatLargeNumber(parts[0], parts[1]);
 
 		} else {
 			data = utils.formatLargeNumber(parseInt(params));
 		}
-	} else if (func == "formatCurrencyAmountInSmallestUnits") {
-		var parts = params.split(",");
+	} else if (func === "formatCurrencyAmountInSmallestUnits") {
+		const parts = parseCommaSeparatedInts(params);
 
 		data = utils.formatCurrencyAmountInSmallestUnits(new Decimal(parts[0]), parseInt(parts[1]));
 
 	} else {
-		data = {success:false, error:`Unknown function: ${func}`};
+		data = {success:false, error:`Unknown function`};
 	}
 
 	res.json(data);
