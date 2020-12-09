@@ -642,8 +642,6 @@ const reflectPromise = p => p.then(v => ({v, status: "resolved" }),
 global.errorStats = {};
 
 function logError(errorId, err, optionalUserData = null) {
-	err = xss(err)
-
 	if (!global.errorLog) {
 		global.errorLog = [];
 	}
@@ -663,10 +661,10 @@ function logError(errorId, err, optionalUserData = null) {
 		global.errorLog.splice(0, 1);
 	}
 
-	debugErrorLog("Error " + xss(errorId) + ": " + xss(err) + ", json: " + JSON.stringify(xss(err)) + (optionalUserData != null ? (", userData: " + xss(optionalUserData) + " (json: " + JSON.stringify(xss(optionalUserData)) + ")") : ""));
+	debugErrorLog("Error " + xss(errorId) + ": " + (err) + ", json: " + JSON.stringify(err) + (optionalUserData != null ? (", userData: " + (optionalUserData) + " (json: " + JSON.stringify(optionalUserData) + ")") : ""));
 	
 	if (err && err.stack) {
-		debugErrorVerboseLog("Stack: " + xss(err.stack));
+		debugErrorVerboseLog("Stack: " + (err.stack));
 	}
 
 	var returnVal = {errorId:errorId, error:err};
