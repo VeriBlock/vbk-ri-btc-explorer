@@ -77,6 +77,7 @@ router.get("/", function(req, res, next) {
 	// promiseResults[3] and [4]
 	promises.push(coreApi.getNetworkHashrate(144));
 	promises.push(coreApi.getNetworkHashrate(1008));
+	console.assert(promises.length === 5)
 
 
 	coreApi.getBlockchainInfo().then(function(getblockchaininfo) {
@@ -192,7 +193,7 @@ router.get("/", function(req, res, next) {
 			}).catch(function(err) {
 				utils.logError("32978efegdde", err);
 				
-				res.locals.userMessage = "Error loading recent blocks: " + xss(err);
+				// res.locals.userMessage = "Error loading recent blocks: " + xss(err);
 
 				res.render("index");
 
