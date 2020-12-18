@@ -25,6 +25,7 @@ const parseCommaSeparatedInts = (param) => {
 
 function parseHexString(str) {
     try {
+        var copy = (' ' + str).slice(1);
         if(str.length < 2) {
             return shouldParseInt(str, 16)
         }
@@ -33,7 +34,7 @@ function parseHexString(str) {
             shouldParseInt(el, 16)
             str = str.substring(2, str.length);
         }
-        return str;
+        return copy;
     } catch(e) {
         throw new Error(`Expected HEX string, got: ${str} (error: ${e})`)
     }
