@@ -12,7 +12,7 @@ const parseCommaSeparated = (param, inner) => {
 const shouldParseInt = (i, base = 10) => {
     const parsed = parseInt(i, base);
     if(isNaN(parsed)) {
-        throw new Error("Element " + i + " is not an int with base=" + base)
+        throw new Error("Element " + xss(i) + " is not an int with base=" + base)
     }
     return parsed
 }
