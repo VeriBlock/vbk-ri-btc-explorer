@@ -30,13 +30,13 @@ function parseHexString(str) {
             return shouldParseInt(str, 16)
         }
         while (str.length >= 2) {
-            var el = str.substring(0, 2)
+            let el = str.substring(0, 2);
             shouldParseInt(el, 16)
             str = str.substring(2, str.length);
         }
-        return copy;
+        return xss(copy);
     } catch(e) {
-        throw new Error(`Expected HEX string, got: ${str} (error: ${e})`)
+        throw new Error(`Expected HEX string, got: ${xss(str)} (error: ${xss(e)})`)
     }
 }
 
