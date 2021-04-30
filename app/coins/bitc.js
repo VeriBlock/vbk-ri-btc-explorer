@@ -53,19 +53,19 @@ module.exports = {
 	name:"BitCash",
 	ticker:"BITC",
 	logoUrlsByNetwork:{
-		"main":"/img/logo/btc.svg",
-		"test":"/img/logo/tbtc.svg",
-		"regtest":"/img/logo/tbtc.svg"
+		"main":"/img/logo/bitc.svg",
+		"test":"/img/logo/bitc.svg",
+		"regtest":"/img/logo/bitc.svg"
 	},
 	siteTitlesByNetwork: {
-		"main":"BitCash Explorer",
-		"test":"Testnet Explorer",
-		"regtest":"Regtest Explorer"
+		"main":"Mainnet PoP BitCash Explorer",
+		"test":"Testnet PoP BitCash Explorer",
+		"regtest":"Regtest PoP BitCash Explorer"
 	},
 	siteDescriptionHtml:"<b>BITC Explorer</b> is <a href='https://github.com/janoside/btc-rpc-explorer). If you run your own [Bitcoin Full Node](https://bitcoin.org/en/full-node), **BTC Explorer** can easily run alongside it, communicating via RPC calls. See the project [ReadMe](https://github.com/janoside/btc-rpc-explorer) for a list of features and instructions for running.",
 	nodeTitle:"BitCash Full Node",
 	nodeUrl:"https://github.com/VeriBlock/pop-bitc",
-	demoSiteUrl: "http://94.130.147.196:3002",
+	demoSiteUrl: "",
 	miningPoolsConfigUrls:[
 	],
 	maxBlockWeight: 4000000,
@@ -289,7 +289,7 @@ module.exports = {
 
 				return exchangeRates;
 			}
-			
+
 			return null;
 		}
 	},
