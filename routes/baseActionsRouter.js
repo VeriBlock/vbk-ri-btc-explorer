@@ -733,8 +733,8 @@ router.get("/block-height/:blockHeight", function(req, res, next) {
         res.locals.result.bfiData = bfiData;
         resolve();
       }).catch(error => {
-        const message = Boolean(error.body) ? JSON.parse(error?.body)?.message : error.body || error.body;
-        res.locals.result.bfiError = message
+        const errorData = Boolean(error.body) ? JSON.parse(error.body) : error.body;
+        res.locals.result.bfiError = errorData && errorData.message ? errorData.message : errorData;
         resolve();
       })
     }));
@@ -824,8 +824,8 @@ router.get("/block/:blockHash", function(req, res, next) {
       res.locals.result.bfiData = bfiData;
       resolve();
     }).catch(error => {
-      const message = Boolean(error.body) ? JSON.parse(error?.body)?.message : error.body || error.body;
-      res.locals.result.bfiError = message
+      const errorData = Boolean(error.body) ? JSON.parse(error.body) : error.body;
+      res.locals.result.bfiError = errorData && errorData.message ? errorData.message : errorData;
       resolve();
     })
   }));
@@ -876,8 +876,8 @@ router.get("/block-analysis/:blockHashOrHeight", function(req, res, next) {
         res.locals.result.bfiData = bfiData;
         resolve();
       }).catch(error => {
-        const message = Boolean(error.body) ? JSON.parse(error?.body)?.message : error.body || error.body;
-        res.locals.result.bfiError = message
+        const errorData = Boolean(error.body) ? JSON.parse(error.body) : error.body;
+        res.locals.result.bfiError = errorData && errorData.message ? errorData.message : errorData;
         resolve();
       })
     }));
@@ -970,8 +970,8 @@ router.get("/tx/:transactionId", function(req, res, next) {
         res.locals.result.bfiData = bfiData;
         resolve();
       }).catch(error => {
-        const message = Boolean(error.body) ? JSON.parse(error?.body)?.message : error.body || error.body;
-        res.locals.result.bfiError = message
+        const errorData = Boolean(error.body) ? JSON.parse(error.body) : error.body;
+        res.locals.result.bfiError = errorData && errorData.message ? errorData.message : errorData;
         resolve();
       })
     }));
