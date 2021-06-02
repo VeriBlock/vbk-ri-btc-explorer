@@ -1,6 +1,6 @@
 div.mb-2
 	if (result.getblock.previousblockhash)
-		a.btn.btn-sm.btn-primary.mb-1(href=("/block/" + result.getblock.previousblockhash)) &laquo; Prev Block: 
+		a.btn.btn-sm.btn-primary.mb-1(href=("/block/" + result.getblock.previousblockhash)) &laquo; Prev Block:&#32;
 			span.text-monospace ##{(result.getblock.height - 1).toLocaleString()}
 
 	else if (result.getblock.hash == genesisBlockHash)
@@ -9,11 +9,11 @@ div.mb-2
 	span.mx-2
 
 	if (result.getblock.nextblockhash)
-		a.btn.btn-sm.btn-primary.mb-1(href=("/block/" + result.getblock.nextblockhash)) Next Block: 
+		a.btn.btn-sm.btn-primary.mb-1(href=("/block/" + result.getblock.nextblockhash)) Next Block:&#32;
 			span.text-monospace ##{(result.getblock.height + 1).toLocaleString()}
 			span  &raquo;
 	else
-		a.btn.btn-sm.btn-secondary.disabled.mb-1 Next Block: N/A 
+		a.btn.btn-sm.btn-secondary.disabled.mb-1 Next Block: N/A&#32;
 			small (latest block)
 
 ul.nav.nav-tabs.mb-3
@@ -39,7 +39,7 @@ div.tab-content
 						span !{sbInfo.alertBodyHtml}
 
 						if (sbInfo.referenceUrl && sbInfo.referenceUrl.trim().length > 0 && sbInfo.alertBodyHtml.indexOf(sbInfo.referenceUrl) == -1)
-							span  
+							span &#32;
 								a(href=sbInfo.referenceUrl) Read more
 
 				else
@@ -47,7 +47,7 @@ div.tab-content
 						span #{sbInfo.summary}
 
 						if (sbInfo.referenceUrl && sbInfo.referenceUrl.trim().length > 0)
-							span  
+							span &#32;
 								a(href=sbInfo.referenceUrl) Read more
 
 		div.row
@@ -116,8 +116,8 @@ div.tab-content
 										- var sizeDeltaData = utils.formatLargeNumber(Math.abs(result.blockstats.utxo_size_inc), 1);
 										- var plusMinus = (result.blockstats.utxo_increase > 0) ? "+" : "";
 										if (result.blockstats.utxo_increase)
-											span #{plusMinus}#{result.blockstats.utxo_increase.toLocaleString()} 
-												span.text-muted (#{sizePlusMinus}#{sizeDeltaData[0]} 
+											span #{plusMinus}#{result.blockstats.utxo_increase.toLocaleString()}&#32;
+												span.text-muted (#{sizePlusMinus}#{sizeDeltaData[0]}&#32;
 													small #{sizeDeltaData[1].abbreviation}B
 													span )
 										else
@@ -135,7 +135,7 @@ div.tab-content
 										span.text-muted.mx-1 -
 
 										if (result.blockstats.maxtxsize)
-											span #{result.blockstats.maxtxsize.toLocaleString()} 
+											span #{result.blockstats.maxtxsize.toLocaleString()}&#32;
 											small B
 										else
 											span 0
@@ -157,15 +157,14 @@ div.tab-content
 								div.row
 									div(class=sumTableLabelClass) Weight
 									div.text-monospace(class=sumTableValueClass)
-										span #{result.getblock.weight.toLocaleString()} 
-											small wu 
+										span #{result.getblock.weight.toLocaleString()}&#32;
+											small wu&#32;
 
 										span.text-muted  (#{new Decimal(100 * result.getblock.weight / coinConfig.maxBlockWeight).toDecimalPlaces(2)}% full)
-										
 
 							div.row
 								div(class=sumTableLabelClass) Size
-								div.text-monospace(class=sumTableValueClass) #{result.getblock.size.toLocaleString()} 
+								div.text-monospace(class=sumTableValueClass) #{result.getblock.size.toLocaleString()}&#32;
 									small B
 
 							if (result.getblock.miner)
@@ -182,13 +181,37 @@ div.tab-content
 								div(class=sumTableLabelClass) Confirmations
 								div.text-monospace(class=sumTableValueClass)
 									if (result.getblock.confirmations < 6)
-										span.font-weight-bold.text-warning #{result.getblock.confirmations.toLocaleString()} 
+										span.font-weight-bold.text-warning #{result.getblock.confirmations.toLocaleString()}&#32;
 											a(data-toggle="tooltip", title="Fewer than 6 confirmations is generally considered 'unsettled' for high-value transactions. The applicability of this guidance may vary.")
 												i.fas.fa-unlock-alt
 									else
-										span.font-weight-bold.text-success #{result.getblock.confirmations.toLocaleString()} 
+										span.font-weight-bold.text-success #{result.getblock.confirmations.toLocaleString()}&#32;
 											a(data-toggle="tooltip", title="6 confirmations is generally considered 'settled'. High-value transactions may require more; low-value transactions may require less.")
 												i.fas.fa-lock
+
+							div.row
+								div(class=sumTableLabelClass) BFI Status
+								div.text-monospace(class=sumTableValueClass)
+									if (!result.bfiData)
+										i.fas.fa-question-circle.text-warning
+										strong.text-danger  Unable to determine Bitcoin Finality!
+										strong.monospace  Server response: #{result.bfiError}
+
+									else if (result.bfiData.isAttackInProgress)
+										i(class="fas fa-exclamation-triangle text-danger")
+										strong(class="text-danger")  Alternate Chain Detected, Wait for Bitcoin Finality
+
+									else if (result.bfiData.spFinality >= 0)
+										i(class="fas fa-check-circle text-success")
+										strong(class="text-success")  #{result.bfiData.spFinality + 1} Bitcoin Finality Confirmation(s)
+
+									else
+										i(class="fas fa-exclamation-circle text-warning")
+										strong(class="monospace")  #{Math.abs(result.bfiData.spFinality)} Bitcoin block(s) until Bitcoin Finality
+
+									span &#32;
+									a(href="https://wiki.veriblock.org/index.php/How_VeriBlock_PoP_BFI_Protects_Altchains", data-toggle="tooltip", title="More info about BFI", target="_blank")
+										i(class="fas fa-info-circle")
 
 			if (result.blockstats)
 				div.col-md-6.mb-3
@@ -236,7 +259,7 @@ div.tab-content
 												span.border-dotted(title="These are the fee rates (fee per tx weight) for transactions in this block - min, avg, and max.", data-toggle="tooltip") Fee Rates
 												br
 												small (min, avg, max)
-												
+
 											div.summary-split-table-content.text-monospace
 												if (result.blockstats.minfeerate)
 													span #{result.blockstats.minfeerate.toLocaleString()}
@@ -282,7 +305,7 @@ div.tab-content
 													include ./value-display.pug
 												else
 													span 0
-												
+
 												br
 
 												if (result.blockstats.maxfee)
@@ -312,7 +335,7 @@ div.tab-content
 								div.summary-split-table-label Difficulty
 								div.summary-split-table-content.text-monospace
 									- var difficultyData = utils.formatLargeNumber(result.getblock.difficulty, 3);
-									
+
 									span(title=parseFloat(result.getblock.difficulty).toLocaleString(), data-toggle="tooltip")
 										span #{difficultyData[0]}
 										span  x 10
@@ -344,7 +367,7 @@ div.tab-content
 									span  x 10
 									sup #{chainworkData[1].exponent}
 									small  hashes
-									
+
 									span.text-muted  (#{result.getblock.chainwork.replace(/^0+/, '')})
 
 		div.card.shadow-sm.mb-3
@@ -365,7 +388,7 @@ div.tab-content
 			div.card-body.px-2.px-md-3
 				div.row
 					div.col-md-4
-						h2.h6.mb-0.d-inline-block #{txCount.toLocaleString()} 
+						h2.h6.mb-0.d-inline-block #{txCount.toLocaleString()}&#32;
 							if (txCount == 1)
 								span Transaction
 							else
@@ -378,13 +401,13 @@ div.tab-content
 							small.mr-1.text-muted Show
 							div.btn-group(role="group")
 								a.btn.btn-sm.btn-primary.px-2.py-0(href=(paginationBaseUrl + "?limit=20"), class=((limit == 20 && txCount > limit) ? "active" : false)) 20
-								
+
 								if (txCount > 50)
 									a.btn.btn-sm.btn-primary.px-2.py-0(href=(paginationBaseUrl + "?limit=50") class=(limit == 50 ? "active" : false)) 50
-								
+
 								if (txCount > 100)
 									a.btn.btn-sm.btn-primary.px-2.py-0(href=(paginationBaseUrl + "?limit=100"), class=(limit == 100 ? "active" : false)) 100
-								
+
 								a.btn.btn-sm.btn-primary.px-2.py-0(href=(paginationBaseUrl + "?limit=3000"), class=(limit >= txCount ? "active" : false)) all
 
 				hr
@@ -400,14 +423,14 @@ div.tab-content
 							div.card-header.text-monospace
 								if (tx && tx.txid)
 									span(title=`Index in Block: #${(txIndex + offset).toLocaleString()}`, data-toggle="tooltip") ##{(txIndex + offset).toLocaleString()}
-									span  &ndash; 
+									span  &ndash;&#32;
 									a(href=("/tx/" + tx.txid)) #{tx.txid}
 
 									if (global.specialTransactions && global.specialTransactions[tx.txid])
-										span  
+										span &#32;
 										a(data-toggle="tooltip", title=(coinConfig.name + " Fun! See transaction for details"))
 											i.fas.fa-certificate.text-primary
-										
+
 							div.card-body.px-2.px-md-3
 								//pre
 								//	code.json.bg-light #{JSON.stringify(result.txInputsByTransaction[tx.txid], null, 4)}
@@ -416,7 +439,7 @@ div.tab-content
 									- var blockHeight = result.getblock.height;
 
 									include ./transaction-io-details.pug
-									
+
 						//pre
 						//	code.json.bg-light #{JSON.stringify(tx, null, 4)}
 
@@ -429,11 +452,11 @@ div.tab-content
 						- var paginationUrlFunction = function(x) {
 							- return paginationBaseUrl + "?limit=" + limit + "&offset=" + ((x - 1) * limit);
 						- }
-						
+
 						hr
 
 						include ./pagination.pug
-					
+
 	div.tab-pane(id="tab-json", role="tabpanel")
 		- var blockDetails = JSON.parse(JSON.stringify(result.getblock));
 		- blockDetails.tx = "See 'Transaction IDs'";

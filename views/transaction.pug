@@ -6,11 +6,11 @@ block headContent
 		.field {
 			word-wrap: break-word;
 		}
-		
+
 
 block content
 	if (result && result.getrawtransaction)
-		h1.h3.word-wrap Transaction 
+		h1.h3.word-wrap Transaction&#32;
 			br
 			small.text-monospace #{txid}
 		hr
@@ -54,14 +54,14 @@ block content
 								span !{stInfo.alertBodyHtml}
 
 								if (stInfo.referenceUrl && stInfo.referenceUrl.trim().length > 0 && stInfo.alertBodyHtml.indexOf(stInfo.referenceUrl) == -1)
-									span  
+									span &#32;
 										a(href=stInfo.referenceUrl) Read more
 						else
 							p
 								span #{stInfo.summary}
 
 								if (stInfo.referenceUrl && stInfo.referenceUrl.trim().length > 0)
-									span  
+									span &#32;
 										a(href=stInfo.referenceUrl) Read more
 
 				- var isTxConfirmed = true;
@@ -129,15 +129,15 @@ block content
 								div.summary-table-label Size
 								div.summary-table-content.text-monospace
 									if (result.getrawtransaction.vsize != result.getrawtransaction.size)
-										span #{result.getrawtransaction.vsize.toLocaleString()} 
+										span #{result.getrawtransaction.vsize.toLocaleString()}&#32;
 										small vB
 										br
-										span.text-muted (#{result.getrawtransaction.size.toLocaleString()} 
+										span.text-muted (#{result.getrawtransaction.size.toLocaleString()}&#32;
 											small B
 											span )
 
 									else
-										span #{result.getrawtransaction.size.toLocaleString()} 
+										span #{result.getrawtransaction.size.toLocaleString()}&#32;
 										small B
 
 							if (result.getrawtransaction.locktime > 0)
@@ -145,15 +145,15 @@ block content
 									div.summary-table-label Locktime
 									div.summary-table-content.text-monospace
 										if (result.getrawtransaction.locktime < 500000000)
-											span Spendable in block 
+											span Spendable in block&#32;
 											a(href=("/block-height/" + result.getrawtransaction.locktime)) ##{result.getrawtransaction.locktime.toLocaleString()}
-											span  or later 
-											a(href="https://bitcoin.org/en/developer-guide#locktime-and-sequence-number", data-toggle="tooltip", title="More info about locktime", target="_blank") 
+											span  or later&#32;
+											a(href="https://bitcoin.org/en/developer-guide#locktime-and-sequence-number", data-toggle="tooltip", title="More info about locktime", target="_blank")
 												i.fas.fa-info-circle
 										else
-											span Spendable after #{moment.utc(new Date(result.getrawtransaction.locktime * 1000)).format("Y-MM-DD HH:mm:ss")} 
-												small utc 
-											a(href="https://bitcoin.org/en/developer-guide#locktime-and-sequence-number", data-toggle="tooltip", title="More info about locktime", target="_blank") 
+											span Spendable after #{moment.utc(new Date(result.getrawtransaction.locktime * 1000)).format("Y-MM-DD HH:mm:ss")}&#32;
+												small utc&#32;
+											a(href="https://bitcoin.org/en/developer-guide#locktime-and-sequence-number", data-toggle="tooltip", title="More info about locktime", target="_blank")
 												i.fas.fa-info-circle
 
 							if (isTxConfirmed)
@@ -161,15 +161,39 @@ block content
 									div.summary-table-label Confirmations
 									div.summary-table-content.text-monospace
 										if (result.getrawtransaction.confirmations < 6)
-											span.font-weight-bold.text-warning #{result.getrawtransaction.confirmations.toLocaleString()} 
+											span.font-weight-bold.text-warning #{result.getrawtransaction.confirmations.toLocaleString()}&#32;
 												a(data-toggle="tooltip", title="Fewer than 6 confirmations is generally considered 'unsettled' for high-value transactions. The applicability of this guidance may vary.")
 													i.fas.fa-unlock-alt
 
 										else
-											span.font-weight-bold.text-success #{result.getrawtransaction.confirmations.toLocaleString()} 
+											span.font-weight-bold.text-success #{result.getrawtransaction.confirmations.toLocaleString()}&#32;
 												a(data-toggle="tooltip", title="6 confirmations is generally considered 'settled'. High-value transactions may require more; low-value transactions may require less.")
 													i.fas.fa-lock
 
+							if (isTxConfirmed)
+								div.row
+									div.summary-table-label BFI Status
+									div.summary-table-content.text-monospace
+										if (!result.bfiData)
+											i.fas.fa-question-circle.text-warning
+											strong.text-danger  Unable to determine Bitcoin Finality!
+											strong.monospace  Server response: #{result.bfiError}
+
+										else if (result.bfiData.isAttackInProgress)
+											i(class="fas fa-exclamation-triangle text-danger")
+											strong(class="text-danger")  Alternate Chain Detected, Wait for Bitcoin Finality
+
+										else if (result.bfiData.spFinality >= 0)
+											i(class="fas fa-check-circle text-success")
+											strong(class="text-success")  #{result.bfiData.spFinality + 1} Bitcoin Finality Confirmation(s)
+
+										else
+											i(class="fas fa-exclamation-circle text-warning")
+											strong(class="monospace")  #{Math.abs(result.bfiData.spFinality)} Bitcoin block(s) until Bitcoin Finality
+
+										span &#32;
+										a(href="https://wiki.veriblock.org/index.php/How_VeriBlock_PoP_BFI_Protects_Altchains", data-toggle="tooltip", title="More info about BFI", target="_blank")
+											i(class="fas fa-info-circle")
 
 							if (result.getrawtransaction.vin[0].coinbase)
 								div.row
@@ -219,16 +243,16 @@ block content
 										div.summary-table-label Fee Rate
 										div.summary-table-content.text-monospace
 											if (result.getrawtransaction.vsize != result.getrawtransaction.size)
-												span #{utils.addThousandsSeparators(new DecimalRounded(totalInputValue).minus(totalOutputValue).dividedBy(result.getrawtransaction.vsize).times(100000000))} 
+												span #{utils.addThousandsSeparators(new DecimalRounded(totalInputValue).minus(totalOutputValue).dividedBy(result.getrawtransaction.vsize).times(100000000))}&#32;
 												small sat/vB
 												br
 
-												span.text-muted (#{utils.addThousandsSeparators(new DecimalRounded(totalInputValue).minus(totalOutputValue).dividedBy(result.getrawtransaction.size).times(100000000))} 
+												span.text-muted (#{utils.addThousandsSeparators(new DecimalRounded(totalInputValue).minus(totalOutputValue).dividedBy(result.getrawtransaction.size).times(100000000))}&#32;
 													small sat/B
 													span )
 
 											else
-												span #{utils.addThousandsSeparators(new DecimalRounded(totalInputValue).minus(totalOutputValue).dividedBy(result.getrawtransaction.size).times(100000000))} 
+												span #{utils.addThousandsSeparators(new DecimalRounded(totalInputValue).minus(totalOutputValue).dividedBy(result.getrawtransaction.size).times(100000000))}&#32;
 													small sat/B
 
 							- var daysDestroyed = new Decimal(0);
@@ -236,7 +260,7 @@ block content
 								- var vout = null;
 								if (result.txInputs && result.txInputs[xInputIndex])
 									- var vout = result.txInputs[xInputIndex];
-									
+
 									if (vout.utxoTime)
 										- var dt = result.getrawtransaction.time - vout.utxoTime;
 										- var dtDays = dt / 60 / 60 / 24;
@@ -268,7 +292,7 @@ block content
 				div.card.shadow-sm.mb-3
 					div.card-body.px-2.px-md-3
 						h2.h6.mb-0
-							span #{result.getrawtransaction.vin.length.toLocaleString()} 
+							span #{result.getrawtransaction.vin.length.toLocaleString()}&#32;
 								if (result.getrawtransaction.vin.length == 1)
 									span Input
 								else
@@ -276,16 +300,15 @@ block content
 
 								span.mx-2.text-muted.text-small /
 
-								span #{result.getrawtransaction.vout.length.toLocaleString()} 
+								span #{result.getrawtransaction.vout.length.toLocaleString()}&#32;
 								if (result.getrawtransaction.vout.length == 1)
 									span Output
 								else
 									span Outputs
 
 						hr
-								
 
-						
+
 						- var tx = result.getrawtransaction;
 						- var txInputs = result.txInputs;
 						- var blockHeight = -1;
@@ -298,7 +321,7 @@ block content
 						div.card.shadow-sm.mb-3
 							div.card-body.px-2.px-md-3
 								h3.h6.mb-0
-									span #{mempoolDetails.ancestors.length.toLocaleString()} 
+									span #{mempoolDetails.ancestors.length.toLocaleString()}&#32;
 									if (mempoolDetails.ancestors.length == 1)
 										span Ancestor
 									else
@@ -314,7 +337,7 @@ block content
 						div.card.shadow-sm.mb-3
 							div.card-body.px-2.px-md-3
 								h3.h6.mb-0
-									span #{mempoolDetails.descendants.length.toLocaleString()} 
+									span #{mempoolDetails.descendants.length.toLocaleString()}&#32;
 									if (mempoolDetails.descendants.length == 1)
 										span Descendant
 									else
@@ -342,7 +365,7 @@ block content
 									tr
 										th.text-monospace
 											a(data-toggle="tooltip", title=("Input #" + vinIndex), style="white-space: nowrap;")
-												span > 
+												span >&#32;
 												span.font-weight-normal ##{vinIndex.toLocaleString()}
 
 										td.word-wrap.text-break.text-monospace
@@ -372,7 +395,7 @@ block content
 									tr
 										th.text-monospace
 											a(data-toggle="tooltip", title=("Output #" + (voutIndex + 1)), style="white-space: nowrap;")
-												span < 
+												span <&#32;
 												span.font-weight-normal ##{voutIndex.toLocaleString()}
 
 										td.text-monospace.word-wrap
@@ -396,7 +419,7 @@ block content
 					div.card-body
 						h3.h6.mb-0 UTXOs
 						hr
-							
+
 						div.highlight
 							pre
 								code.json.bg-light(data-lang="json") #{JSON.stringify(utxos, null, 4)}
@@ -409,4 +432,4 @@ block content
 
 				//pre #{JSON.stringify(result.txInputs, null, 4)}
 
-		
+
