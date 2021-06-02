@@ -177,6 +177,7 @@ block content
 										if (!result.bfiData)
 											i.fas.fa-question-circle.text-warning
 											strong.text-danger  Unable to determine Bitcoin Finality!
+											br
 											strong.monospace  Server response: #{result.bfiError}
 
 										else if (result.bfiData.isAttackInProgress)
