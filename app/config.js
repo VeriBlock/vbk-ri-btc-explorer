@@ -34,7 +34,14 @@ for (var i = 0; i < electrumXServerUriStrings.length; i++) {
 }
 
 var vbkExplorerUrl = process.env.VBK_EXPLORER_URL || "https://testnet.explore.veriblock.org";
-var bfiApiUrl = process.env.BFI_API_URL || "http://localhost:8080";
+var bfiApiUrl = process.env.BFI_API_URL || 'http://localhost:4568';
+var coinId = process.env.BTCEXP_COIN_ID || null;
+
+if (coinId) {
+  bfiApiUrl = `${bfiApiUrl}/${coinId}`
+} else {
+  bfiApiUrl = `${bfiApiUrl}/api`
+}
 
 ["BTCEXP_DEMO", "BTCEXP_PRIVACY_MODE", "BTCEXP_NO_INMEMORY_RPC_CACHE"].forEach(function(item) {
 	if (process.env[item] === undefined) {

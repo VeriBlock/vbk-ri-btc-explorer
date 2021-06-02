@@ -1,8 +1,8 @@
 const request = require("request");
 const config = require("./../config.js");
-// var utils = require("./../utils.js");
+var utils = require("./../utils.js");
 
-const baseUrl = `${config.bfiApiUrl}/api/chains`
+const baseUrl = `${config.bfiApiUrl}/chains`
 
 const options = {
   headers: {
@@ -61,7 +61,7 @@ const requestAPI = (optionsData) => {
           response,
           body
         };
-        // utils.logError("n294vg6yn2m0", fullError);
+        utils.logError("n294vg6yn2m0", fullError);
         reject(fullError);
       }
     });
