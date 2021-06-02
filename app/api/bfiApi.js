@@ -49,7 +49,7 @@ const getBfiByTransactionId = (txId) => {
 const requestAPI = (optionsData) => {
   return new Promise((resolve, reject) => {
     request(optionsData, (error, response, body) => {
-      if (error == null && response ?.statusCode === 200) {
+      if (error == null && response && response.statusCode && response.statusCode === 200) {
         const data = JSON.parse(body);
         resolve({
           spFinality: data.spFinality,
