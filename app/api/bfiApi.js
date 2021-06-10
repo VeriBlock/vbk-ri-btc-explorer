@@ -52,7 +52,7 @@ const requestAPI = (optionsData) => {
       if (error == null && response && response.statusCode && response.statusCode === 200) {
         const data = JSON.parse(body);
         resolve({
-          spFinality: data.spFinality,
+          bitcoinFinality: data.bitcoinFinality,
           isAttackInProgress: data.isAttackInProgress
         })
       } else {

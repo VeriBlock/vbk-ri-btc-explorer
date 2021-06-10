@@ -202,13 +202,13 @@ div.tab-content
 										i(class="fas fa-exclamation-triangle text-danger")
 										strong(class="text-danger")  Alternate Chain Detected, Wait for Bitcoin Finality
 
-									else if (result.bfiData.spFinality >= 0)
+									else if (result.bfiData.bitcoinFinality >= 0)
 										i(class="fas fa-check-circle text-success")
-										strong(class="text-success")  #{result.bfiData.spFinality + 1} Bitcoin Finality Confirmation(s)
+										strong(class="text-success")  #{result.bfiData.bitcoinFinality + 1} Bitcoin Finality Confirmation(s)
 
 									else
 										i(class="fas fa-exclamation-circle text-warning")
-										strong(class="monospace")  #{Math.abs(result.bfiData.spFinality)} Bitcoin block(s) until Bitcoin Finality
+										strong(class="monospace")  #{Math.abs(result.bfiData.bitcoinFinality)} Bitcoin block(s) until Bitcoin Finality
 
 									span &#32;
 									a(href="https://wiki.veriblock.org/index.php/How_VeriBlock_PoP_BFI_Protects_Altchains", data-toggle="tooltip", title="More info about BFI", target="_blank")
