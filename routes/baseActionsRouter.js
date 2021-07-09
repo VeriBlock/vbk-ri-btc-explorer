@@ -729,7 +729,7 @@ router.get("/block-height/:blockHeight", function(req, res, next) {
 		}));
 
     promises.push(new Promise(function (resolve, reject) {
-      bfiApi.getBfiByBlockHeight(blockHeight).then(bfiData => {
+      bfiApi.getBfiByBlockHash(result.hash).then(bfiData => {
         res.locals.result.bfiData = bfiData;
         resolve();
       }).catch(error => {
@@ -966,7 +966,7 @@ router.get("/tx/:transactionId", function(req, res, next) {
 		}));
 
     promises.push(new Promise(function (resolve, reject) {
-      bfiApi.getBfiByTransactionId(txid).then(bfiData => {
+      bfiApi.getBfiByBlockHash(tx.blockhash).then(bfiData => {
         res.locals.result.bfiData = bfiData;
         resolve();
       }).catch(error => {
