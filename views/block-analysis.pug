@@ -4,7 +4,7 @@ block headContent
 	title Block Analysis ##{result.getblock.height.toLocaleString()}, #{result.getblock.hash}
 
 block content
-	h1.h3 Block Analysis 
+	h1.h3 Block Analysis&#32;
 		small.text-monospace(style="width: 100%;") ##{result.getblock.height.toLocaleString()}
 		br
 		small.text-monospace.word-wrap(style="width: 100%;") #{result.getblock.hash}
@@ -12,7 +12,7 @@ block content
 
 	div.mb-2
 		if (result.getblock)
-			a.btn.btn-sm.btn-primary.mb-1(href=("/block/" + result.getblock.hash)) &laquo; Block Details: 
+			a.btn.btn-sm.btn-primary.mb-1(href=("/block/" + result.getblock.hash)) &laquo; Block Details:&#32;
 				span.text-monospace ##{result.getblock.height.toLocaleString()}
 
 	div.row
@@ -42,11 +42,9 @@ block content
 							div.row
 								div.summary-table-label Weight
 								div.summary-table-content.text-monospace
-									span #{result.getblock.weight.toLocaleString()} 
-										small wu 
-
+									span #{result.getblock.weight.toLocaleString()}&#32;
+										small wu&#32;
 									span.text-muted  (#{new Decimal(100 * result.getblock.weight / coinConfig.maxBlockWeight).toDecimalPlaces(2)}% full)
-									
 						else
 							div.row
 								div.summary-table-label Size
@@ -61,18 +59,43 @@ block content
 							div.summary-table-label Confirmations
 							div.summary-table-content.text-monospace
 								if (result.getblock.confirmations < 6)
-									span.font-weight-bold.text-warning #{result.getblock.confirmations.toLocaleString()} 
+									span.font-weight-bold.text-warning #{result.getblock.confirmations.toLocaleString()}&#32;
 										a(data-toggle="tooltip", title="Fewer than 6 confirmations is generally considered 'unsettled' for high-value transactions. The applicability of this guidance may vary.")
 											i.fas.fa-unlock-alt
 								else
-									span.font-weight-bold.text-success #{result.getblock.confirmations.toLocaleString()} 
+									span.font-weight-bold.text-success #{result.getblock.confirmations.toLocaleString()}&#32;
 										a(data-toggle="tooltip", title="6 confirmations is generally considered 'settled'. High-value transactions may require more; low-value transactions may require less.")
 											i.fas.fa-lock
+
+						div.row
+							div.summary-table-label BFI Status
+							div.summary-table-content.text-monospace
+								if (!result.bfiData)
+									i.fas.fa-question-circle.text-warning
+									strong.text-danger  Unable to determine Bitcoin Finality!
+									br
+									strong.monospace  Server response: #{result.bfiError}
+
+								else if (result.bfiData.isAttackInProgress)
+									i(class="fas fa-exclamation-triangle text-danger")
+									strong(class="text-danger")  Alternate Chain Detected, Wait for Bitcoin Finality
+
+								else if (result.bfiData.bitcoinFinality >= 0)
+									i(class="fas fa-check-circle text-success")
+									strong(class="text-success")  #{result.bfiData.bitcoinFinality + 1} Bitcoin Finality Confirmation(s)
+
+								else
+									i(class="fas fa-exclamation-circle text-warning")
+									strong(class="monospace")  #{Math.abs(result.bfiData.bitcoinFinality)} Bitcoin block(s) until Bitcoin Finality
+
+								span &#32;
+								a(href="https://veriblock.org/vbfi/", data-toggle="tooltip", title="More info about BFI", target="_blank")
+									i(class="fas fa-info-circle")
 
 	div#progress-wrapper.mb-huge
 		div.card.shadow-sm.mb-3
 			div.card-body
-				h4.h6 Loading transactions: 
+				h4.h6 Loading transactions:&#32;
 					span(id="progress-text")
 				div.progress.mt-2(id="progress-bar", style="height: 7px;")
 					div.progress-bar(id="data-progress", role="progressbar", aria-valuenow="0", aria-valuemin="0" ,aria-valuemax="100")
@@ -147,7 +170,7 @@ block content
 										small.data-tag.bg-dark.data-type
 
 									td.data-count
-								
+
 			div.col-lg-6.mb-3
 				div.card.shadow-sm(style="height: 100%;")
 					div.card-body
@@ -226,7 +249,7 @@ block content
 						hr
 
 						canvas(id="graph-tx-outputs")
-	
+
 
 
 block endOfBody
@@ -247,7 +270,7 @@ block endOfBody
 
 		function loadTransactions(txidChunks, chunkSize, count) {
 			var chunkStrs = [];
-			
+
 			for (var i = 0; i < txidChunks.length; i++) {
 				var txidChunk = txidChunks[i];
 
@@ -272,7 +295,7 @@ block endOfBody
 				//console.log("Done: " + Math.min(((chunkIndexDone + 1) * chunkSize), count) + " of " + count);
 
 				var wPercent = `${parseInt(100 * (chunkIndexDone + 1) / parseFloat(chunkCount))}%`;
-				
+
 				$("#data-progress").css("width", wPercent);
 				$("#progress-text").text(`${Math.min(((chunkIndexDone + 1) * chunkSize), count).toLocaleString()} of ${count.toLocaleString()} (${wPercent})`);
 			};
@@ -307,7 +330,7 @@ block endOfBody
 
 		function fillTopValueTxTable(data) {
 			var count = Math.min(10, data.topValueTxs.length);
-			
+
 			for (var i = 0; i < count; i++) {
 				var item = data.topValueTxs[i];
 
@@ -317,7 +340,7 @@ block endOfBody
 
 				row.find(".data-tx-link").html(`<a href='/tx/${item.txid}'>${item.txid.substring(0, 14)}<span class='d-inline d-xl-none'>${item.txid.substring(14, 32)}</span><span class='d-none d-xxl-inline'>${item.txid.substring(14, 30)}</span>…</a>`);
 				row.find(".data-tx-value").text(item.value);
-				
+
 				updateCurrencyValue(row.find(".data-tx-value"), item.value);
 
 				row.show();
@@ -328,7 +351,7 @@ block endOfBody
 
 		function fillTopFeeTxTable(data) {
 			var count = Math.min(10, data.topFeeTxs.length);
-			
+
 			for (var i = 0; i < count; i++) {
 				var item = data.topFeeTxs[i];
 
@@ -338,7 +361,7 @@ block endOfBody
 
 				row.find(".data-tx-link").html(`<a href='/tx/${item.txid}'>${item.txid.substring(0, 14)}<span class='d-inline d-xl-none'>${item.txid.substring(14, 32)}</span><span class='d-none d-xxl-inline'>${item.txid.substring(14, 30)}</span>…</a>`);
 				row.find(".data-tx-value").text(item.value);
-				
+
 				updateCurrencyValue(row.find(".data-tx-value"), item.value);
 
 				row.show();
@@ -349,7 +372,7 @@ block endOfBody
 
 		function fillTopSizeTxTable(data) {
 			var count = Math.min(10, data.topSizeTxs.length);
-			
+
 			for (var i = 0; i < count; i++) {
 				var item = data.topSizeTxs[i];
 
@@ -399,7 +422,7 @@ block endOfBody
 				if (i == 0) {
 					row.addClass("table-borderless");
 				}
-				
+
 				// span(title=`Output Type: ${utils.outputTypeName(inputTypeKey)}`, data-toggle="tooltip") #{utils.outputTypeAbbreviation(inputTypeKey)}
 				row.find(".data-type").html(`<span title='Type: ${item.type}' data-toggle='tooltip'>${item.type}</span>`);
 				row.find(".data-count").text(item.count.toLocaleString());
@@ -419,7 +442,7 @@ block endOfBody
 				if (i == 0) {
 					row.addClass("table-borderless");
 				}
-				
+
 				// span(title=`Output Type: ${utils.outputTypeName(inputTypeKey)}`, data-toggle="tooltip") #{utils.outputTypeAbbreviation(inputTypeKey)}
 				row.find(".data-type").html(`<span title='Type: ${item.type}' data-toggle='tooltip'>${item.type}</span>`);
 				row.find(".data-count").text(item.count.toLocaleString());
@@ -508,7 +531,7 @@ block endOfBody
 			}
 
 			var url = `/api/block-tx-summaries/${blockHeight}/${chunks[chunkIndex]}`;
-			
+
 			//console.log(url);
 
 			$.ajax({
@@ -520,7 +543,7 @@ block endOfBody
 				}
 
 				statusCallback(chunkIndex, chunks.length);
-				
+
 				getTxData(results, chunks, chunkIndex + 1, statusCallback, finishedCallback);
 			});
 		}
@@ -530,10 +553,10 @@ block endOfBody
 
 			analysis.inputTypeCounts = {};
 			analysis.outputTypeCounts = {};
-			
+
 			analysis.txValues = [];
 			analysis.txValueGraphData = [];
-			
+
 			analysis.txFees = [];
 			analysis.txFeeGraphData = [];
 
@@ -546,11 +569,11 @@ block endOfBody
 				var txSummary = txResults[i];
 
 				//console.log(JSON.stringify(txSummary));
-				
+
 				for (var j = 0; j < txSummary.vout.length; j++) {
 					var vout = txSummary.vout[j];
 					var outputType = vout.type;
-					
+
 					if (!analysis.outputTypeCounts[outputType]) {
 						analysis.outputTypeCounts[outputType] = 0;
 					}
@@ -564,7 +587,7 @@ block endOfBody
 
 				analysis.txValues.push({txid:txSummary.txid, value:new Decimal(txSummary.totalOutput)});
 				analysis.txValueGraphData.push({x:i, y:new Decimal(txSummary.totalOutput).toNumber()});
-				
+
 				analysis.txFees.push({txid:txSummary.txid, value:new Decimal(txSummary.totalFee)});
 				analysis.txFeeGraphData.push({x:i, y:new Decimal(txSummary.totalFee).toNumber()});
 
@@ -577,9 +600,9 @@ block endOfBody
 				if (!txSummary.coinbase) {
 					for (var j = 0; j < txSummary.vin.length; j++) {
 						var vin = txSummary.vin[j];
-						
+
 						var inputType = vin.type;
-						
+
 						if (!analysis.inputTypeCounts[inputType]) {
 							analysis.inputTypeCounts[inputType] = 0;
 						}
@@ -613,7 +636,7 @@ block endOfBody
 			var topFeeSats = parseInt(topFee);
 
 			var distributionBucketCount = 25;
-			
+
 			analysis.valueDistribution = [];
 			analysis.valueDistributionLabels = [];
 

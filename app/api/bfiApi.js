@@ -1,36 +1,75 @@
-var request = require("request");
-var config = require("./../config.js");
+const request = require("request");
+const config = require("./../config.js");
 var utils = require("./../utils.js");
 
-function getBlockBfi(blockHeight) {
-	return new Promise(function(resolve, reject) {
-		// need to query the total number of tx first, then build paging info from that value
-		var options = {
-			url: `${config.bfiApiUrl}/api/chains/blocks/best/${blockHeight}`,
-			headers: {
-				'User-Agent': 'request'
-			}
-		};
+const baseUrl = `${config.bfiApiUrl}/chains`
 
-		request(options, function(error, response, body) {
-			if (error == null && response && response.statusCode && response.statusCode == 200) {
-				var data = JSON.parse(body);
+const options = {
+  headers: {
+    'User-Agent': 'request'
+  }
+};
 
-				resolve({
-					spFinality: data.spFinality,
-					isAttackInProgress: data.isAttackInProgress
-				})
-			} else {
-				var fullError = {error:error, response:response, body:body};
+const getBfiByBlockHeight = (blockHeight) => {
+  return new Promise((resolve, reject) => {
+    options.url = `${baseUrl}/blocks/best/${blockHeight}`
 
-				utils.logError("n294vg6yn2m0", fullError);
+    requestAPI(options).then(data => {
+      resolve(data);
+    }).catch(error => {
+      reject(error);
+    })
+  });
+}
 
-				reject(fullError);
-			}
-		});
-	});
+const getBfiByBlockHash = (blockHash) => {
+  return new Promise((resolve, reject) => {
+    options.url = `${baseUrl}/blocks/${blockHash}`
+
+    requestAPI(options).then(data => {
+      resolve(data);
+    }).catch(error => {
+      reject(error);
+    })
+  });
+}
+
+const getBfiByTransactionId = (txId) => {
+  return new Promise((resolve, reject) => {
+    options.url = `${baseUrl}/transactions/${txId}`
+
+    requestAPI(options).then(data => {
+      resolve(data);
+    }).catch(error => {
+      reject(error);
+    })
+  });
+}
+
+const requestAPI = (optionsData) => {
+  return new Promise((resolve, reject) => {
+    request(optionsData, (error, response, body) => {
+      if (error == null && response && response.statusCode && response.statusCode === 200) {
+        const data = JSON.parse(body);
+        resolve({
+          bitcoinFinality: data.bitcoinFinality,
+          isAttackInProgress: data.isAttackInProgress
+        })
+      } else {
+        const fullError = {
+          error,
+          response,
+          body
+        };
+        utils.logError("n294vg6yn2m0", fullError);
+        reject(fullError);
+      }
+    });
+  })
 }
 
 module.exports = {
-	getBlockBfi: getBlockBfi
+  getBfiByBlockHeight,
+  getBfiByBlockHash,
+  getBfiByTransactionId
 };
