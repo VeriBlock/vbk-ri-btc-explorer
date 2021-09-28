@@ -72,14 +72,14 @@ module.exports = {
 	],
 	maxBlockWeight: 4000000,
 	maxBlockSize: 1000000,
-	difficultyAdjustmentBlockCount: 2016,
+	difficultyAdjustmentBlockCount: 10080,
 	maxSupplyByNetwork: {
 		"main": new Decimal(20999817.31308491), // ref: https://bitcoin.stackexchange.com/a/38998
 		"test": new Decimal(21000000),
 		"regtest": new Decimal(21000000)
 	},
 	targetBlockTimeSeconds: 600,
-	targetBlockTimeMinutes: 10,
+	targetBlockTimeMinutes: 2,
 	currencyUnits:currencyUnits,
 	currencyUnitsByName:{"vBTC":currencyUnits[0], "mvBTC":currencyUnits[1], "bits":currencyUnits[2], "sat":currencyUnits[3]},
 	baseCurrencyUnit:currencyUnits[3],
