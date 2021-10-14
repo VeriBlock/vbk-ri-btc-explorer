@@ -478,7 +478,11 @@ function getBlockTotalFeesFromCoinbaseTxAndBlockHeight(coinbaseTx, blockHeight) 
 		}
 	}
 
-	return totalOutput.minus(new Decimal(blockReward));
+	// return totalOutput.minus(new Decimal(blockReward));
+	// VeriBlock: Temprorary fix.
+	// Can not determine fees only from the coinbase transaction, because in the outputs PoW rewards also presents.
+	// It is impossible to determine fees excluding from the total reward PoW reward for the block
+	return new Decimal(0)
 }
 
 function refreshExchangeRates() {
