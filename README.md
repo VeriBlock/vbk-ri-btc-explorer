@@ -91,15 +91,4 @@ To match the features visible on the demo site at [https://explorer.btc21.org](h
 1. `docker build -t btc-rpc-explorer .`
 2. `docker run -p 3002:3002 -it btc-rpc-explorer`
 
-# Support
-
-If you get value from this project, please consider supporting my continued work with a donation. Any and all donations are truly appreciated.
-
-* [https://donate.btc21.org](https://donate.btc21.org)
-
-
-[npm-ver-img]: https://img.shields.io/npm/v/btc-rpc-explorer.svg?style=flat
-[npm-ver-url]: https://www.npmjs.com/package/btc-rpc-explorer
-[npm-dl-img]: http://img.shields.io/npm/dm/btc-rpc-explorer.svg?style=flat
-[npm-dl-url]: https://npmcharts.com/compare/btc-rpc-explorer?minimal=true
 
