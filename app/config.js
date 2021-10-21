@@ -167,9 +167,9 @@ module.exports = {
 				{
 					title:"Related Sites",
 					links:[
-						{name: "btc1 explorer", url:"http://95.217.67.117:3002", imgUrl:"/img/logo/vbtc.svg"},
-						{name: "btc2 explorer", url:"http://95.217.67.118:3002", imgUrl:"/img/logo/vbtc.svg"},
-						{name: "bfi explorer", url:"http://95.217.125.52:3002", imgUrl:"/img/logo/vbtc.svg"},
+						{name: "btc1 explorer", url:"http://95.217.67.117:3002", imgUrl:"/img/logo/btcsq.svg"},
+						{name: "btc2 explorer", url:"http://95.217.67.118:3002", imgUrl:"/img/logo/btcsq.svg"},
+						{name: "bfi explorer", url:"http://95.217.125.52:3002", imgUrl:"/img/logo/btcsq.svg"},
 						//{name: "Litecoin Explorer", url:"https://ltc.chaintools.io", imgUrl:"/img/logo/ltc.svg"},
 						//{name: "Lightning Explorer", url:"https://lightning.chaintools.io", imgUrl:"/img/logo/lightning.svg"},
 					]

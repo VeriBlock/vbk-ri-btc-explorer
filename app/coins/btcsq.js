@@ -53,9 +53,9 @@ module.exports = {
 	name:"Bitcoin",
 	ticker:"BTC",
 	logoUrlsByNetwork:{
-		"main":"/img/logo/vbtc.svg",
-		"test":"/img/logo/vbtc.svg",
-		"regtest":"/img/logo/vbtc.svg"
+		"main":"/img/logo/btcsq.svg",
+		"test":"/img/logo/btcsq.svg",
+		"regtest":"/img/logo/btcsq.svg"
 	},
 	siteTitlesByNetwork: {
 		"main":"Bitcoin Square Explorer",
