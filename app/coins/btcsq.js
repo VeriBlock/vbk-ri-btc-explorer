@@ -4,17 +4,17 @@ Decimal8 = Decimal.clone({ precision:8, rounding:8 });
 var currencyUnits = [
 	{
 		type:"native",
-		name:"vBTC",
+		name:"BTCSQ",
 		multiplier:1,
 		default:true,
-		values:["", "vbtc", "vBTC"],
+		values:["", "btcsq", "BTCSQ"],
 		decimalPlaces:8
 	},
 	{
 		type:"native",
-		name:"mvBTC",
+		name:"mBTCSQ",
 		multiplier:1000,
-		values:["mvbtc"],
+		values:["mbtcsq"],
 		decimalPlaces:5
 	},
 	{
@@ -53,17 +53,17 @@ module.exports = {
 	name:"Bitcoin",
 	ticker:"BTC",
 	logoUrlsByNetwork:{
-		"main":"/img/logo/vbtc.svg",
-		"test":"/img/logo/vbtc.svg",
-		"regtest":"/img/logo/vbtc.svg"
+		"main":"/img/logo/btcsq.svg",
+		"test":"/img/logo/btcsq.svg",
+		"regtest":"/img/logo/btcsq.svg"
 	},
 	siteTitlesByNetwork: {
-		"main":"vBitcoin Explorer",
-		"test": "vBitcoin Testnet Explorer",
-		"regtest": "vBitcoin Regtest Explorer"
+		"main":"Bitcoin Squared Explorer",
+		"test": "Bitcoin Squared Testnet Explorer",
+		"regtest": "Bitcoin Squared Regtest Explorer"
 	},
-	siteDescriptionHtml:"<b>vBTC Explorer</b> is <a href='https://github.com/janoside/btc-rpc-explorer). If you run your own [Bitcoin Full Node](https://bitcoin.org/en/full-node), **BTC Explorer** can easily run alongside it, communicating via RPC calls. See the project [ReadMe](https://github.com/janoside/btc-rpc-explorer) for a list of features and instructions for running.",
-	nodeTitle:"vBitcoin Full Node",
+	siteDescriptionHtml:"<b>BTCSQ Explorer</b> is <a href='https://github.com/janoside/btc-rpc-explorer). If you run your own [Bitcoin Full Node](https://bitcoin.org/en/full-node), **BTC Explorer** can easily run alongside it, communicating via RPC calls. See the project [ReadMe](https://github.com/janoside/btc-rpc-explorer) for a list of features and instructions for running.",
+	nodeTitle:"Bitcoin Squared Full Node",
 	nodeUrl:"https://bitcoin.org/en/full-node",
 	demoSiteUrl: "",
 	miningPoolsConfigUrls:[
@@ -81,7 +81,7 @@ module.exports = {
 	targetBlockTimeSeconds: 600,
 	targetBlockTimeMinutes: 2,
 	currencyUnits:currencyUnits,
-	currencyUnitsByName:{"vBTC":currencyUnits[0], "mvBTC":currencyUnits[1], "bits":currencyUnits[2], "sat":currencyUnits[3]},
+	currencyUnitsByName:{"BTCSQ":currencyUnits[0], "mBTCSQ":currencyUnits[1], "bits":currencyUnits[2], "sat":currencyUnits[3]},
 	baseCurrencyUnit:currencyUnits[3],
 	defaultCurrencyUnit:currencyUnits[0],
 	feeSatoshiPerByteBucketMaxima: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 25, 50, 75, 100, 150],
