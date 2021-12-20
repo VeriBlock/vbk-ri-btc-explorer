@@ -299,15 +299,64 @@ module.exports = {
 		}
 	},
 	blockRewardFunction:function(blockHeight, chain) {
-		var eras = [ new Decimal8(5) ];
-		for (var i = 1; i < 34; i++) {
-			var previous = eras[i - 1];
-			eras.push(new Decimal8(previous).dividedBy(2));
-		}
+		return GetSubsidyMultiplier(blockHeight, chain);
+		// var eras = [ new Decimal8(5) ];
+		// for (var i = 1; i < 34; i++) {
+		// 	var previous = eras[i - 1];
+		// 	eras.push(new Decimal8(previous).dividedBy(2));
+		// }
 
-		var halvingBlockInterval = (chain === "regtest" ? 150 : 1050000);
-		var index = Math.floor(blockHeight / halvingBlockInterval);
+		// var halvingBlockInterval = (chain === "regtest" ? 150 : 1050000);
+		// var index = Math.floor(blockHeight / halvingBlockInterval);
 
-		return eras[index];
+		// return eras[index];
 	}
 };
+
+function GetSubsidyMultiplier(nHeight, chain) {
+	var halvingBlockInterval = (chain === "regtest" ? 150 : 1050000);
+
+	var halvings = (nHeight - 4183200) / halvingBlockInterval;
+	if (halvings >= 64)
+		return 0;
+
+	var nSubsidy = new Decimal8("1.50447108");
+
+	if (nHeight < 64800) {
+		nSubsidy = new Decimal8("7"); // First period, reward = 7.00
+	} else if (nHeight < 136800) {
+		nSubsidy = new Decimal8("6.5"); // Second period, reward = 6.50
+	} else if (nHeight < 223200) {
+		nSubsidy = new Decimal8("6"); // Third period, reward = 6.00
+	} else if (nHeight < 331200) {
+		nSubsidy = new Decimal8("5.75"); // Fourth period, reward = 5.75
+	} else if (nHeight < 468000) {
+		nSubsidy = new Decimal8("5.5"); // Fifth period, reward = 5.50
+	} else if (nHeight < 640800) {
+		nSubsidy = new Decimal8("5.25"); // Sixth period, reward = 5.25
+	} else if (nHeight < 856800) {
+		nSubsidy = new Decimal8("5"); // Seventh period, reward = 5.00
+	} else if (nHeight < 1123200) {
+		nSubsidy = new Decimal8("4.75"); // Eigth period, reward = 4.75
+	} else if (nHeight < 1447200) {
+		nSubsidy = new Decimal8("4.5"); // Ninth period, reward = 4.50
+	} else if (nHeight < 1836000) {
+		nSubsidy = new Decimal8("4.25"); // Tenth period, reward = 4.25
+	} else if (nHeight < 2296800) {
+		nSubsidy = new Decimal8("4"); // Eleventh period, reward = 4.00
+	} else if (nHeight < 2836800) {
+		nSubsidy = new Decimal8("3.75"); // Twelfth period, reward = 3.75
+	} else if (nHeight < 3463200) {
+		nSubsidy = new Decimal8("3.5"); // Thirteenth period, reward = 3.50
+	} else if (nHeight < 4183200) {
+		nSubsidy = new Decimal8("3"); // Fourteenth period, reward = 3.00
+	}
+
+	// Subsidy is cut in half every 1,051,200 blocks which will occur approximately every 4 years.
+	while (halvings >= 1) {
+		nSubsidy = nSubsidy.dividedBy("2");
+		halvings--;
+	}
+
+	return nSubsidy;
+}
