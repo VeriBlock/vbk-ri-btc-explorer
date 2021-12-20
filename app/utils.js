@@ -750,7 +750,6 @@ function outputTypeName(outputType) {
 		"witness_v0_scripthash": "Witness, v0 Script Hash",
 		"nonstandard": "Non-Standard",
 		"nulldata": "Null Data",
-		"pop": "PoP Payout"
 	};
 
 	if (map[outputType]) {
