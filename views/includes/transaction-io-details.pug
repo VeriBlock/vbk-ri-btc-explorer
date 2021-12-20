@@ -195,10 +195,6 @@ div.row.text-monospace
 												small.data-tag.bg-dark
 													span(title=`Output Type: ${utils.outputTypeName(vout.scriptPubKey.type)}`, data-toggle="tooltip") #{utils.outputTypeAbbreviation(vout.scriptPubKey.type)}
 
-												if (voutIndex >= 1 && voutIndex < tx.vout.length - 2) /*witness, pop root*/
-													small.data-tag.bg-dark
-														span(title=`Output Type: ${utils.outputTypeName("pop")}`, data-toggle="tooltip") POP
-
 
 										each addr in vout.scriptPubKey.addresses
 											a(id=("output-" + voutIndex), href=("/address/" + addr))
