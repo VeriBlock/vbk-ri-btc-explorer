@@ -20,7 +20,7 @@ jobs:
       - name: Docker Push
         uses: elgohr/Publish-Docker-Github-Action@2.22
         with:
-          name: veriblock/btcsq-explorer
+          name: overcookedpanda/btcsq-explorer
           dockerfile: Dockerfile
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
