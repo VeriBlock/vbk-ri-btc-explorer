@@ -18,7 +18,7 @@ jobs:
         with:
           submodules: true
       - name: Docker Push
-        uses: elgohr/Publish-Docker-Github-Action@2.22
+        uses: elgohr/Publish-Docker-Github-Action@v5
         with:
           name: veriblock/btcsq-explorer
           dockerfile: Dockerfile
